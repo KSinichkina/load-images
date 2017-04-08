@@ -1,6 +1,7 @@
 .images-list-holder {
-  margin-top: 200px;
+  margin-top: 160px;
   padding: 20px;
+  list-style: none;
 }
 .editable {
   box-shadow: 0 0 20px 5px #286090;
@@ -9,8 +10,8 @@
   box-shadow: 0 0 20px 5px #c9302c;
 }
 
-// TODO add normalizer
-ul {
-  padding: 0;
-  list-style: none;
+@media screen and (min-width: 768px) {
+  .images-list-holder {
+    margin-top: 100px;
+  }
 }

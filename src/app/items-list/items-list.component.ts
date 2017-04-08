@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ListService } from './items-list.service';
+import { Subscription }   from 'rxjs/Subscription';
 
+import { ListService } from './items-list.service';
 import { ListItemsService }     from './../service/edit-item.service.ts';
 
 @Component({
@@ -12,9 +13,12 @@ import { ListItemsService }     from './../service/edit-item.service.ts';
 export class ItemsListComponent {
   private items: Array<{id: number, src: string, tooltip: string, isInEditItem?: boolean}>;
   private editItems: Array<number>;
+  private subscription: Subscription;
 
   constructor(private listService: ListService, private ListItemsService: ListItemsService) {
     this.editItems = [];
+
+    this.subscription = ListItemsService.getItems$.subscribe(items => this.items = items.json());
   }
 
   ngOnInit(): void {
@@ -39,5 +43,9 @@ export class ItemsListComponent {
       this.editItems.push(item.id);
       this.ListItemsService.removedAction(this.editItems);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

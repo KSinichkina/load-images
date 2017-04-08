@@ -6,13 +6,15 @@
         <input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" (change)="onFileLoadChange($event)" />
       </div>
       <input type="text" class="new-tooltip form-control" placeholder="Set tooltip text" value="{{editableItem.tooltip}}" (change)="onInputChange($event)" />
-      <br />
-      <button type="button" class="btn btn-success" (click)="uploader.uploadAll()" (click)="onSave($event)" [disabled]="!uploader.getNotUploadedItems().length && !isFileChanged && !isInputChanged">
-        <span class="glyphicon glyphicon-upload"></span> Upload all
-      </button>
-      <img class="image-preview" src="{{ editableItem.src }}"  width="50">
-      <button [disabled] ="!isFileChanged && !isInputChanged && !isRemoveAction" (click)="onSaveAll($event)" class="btn btn-success">Save All</button>
+      <div class="actions">
+        <button type="button" class="btn btn-success" (click)="uploader.uploadAll()" (click)="onSave($event)" [disabled]="!uploader.getNotUploadedItems().length && !isFileChanged && !isInputChanged">
+          <span class="glyphicon glyphicon-upload"></span> Upload all
+        </button>
+        <img class="image-preview" src="{{ editableItem.src }}" [class.hidden]="!isFileChanged" width="50">
+        <button [disabled] ="!isFileChanged && !isInputChanged && !isRemoveAction" (click)="onSaveAll($event)" class="btn btn-success">Save All</button>
+      </div>
     </div>
   </form>
 </div>
+
 <items-list></items-list>

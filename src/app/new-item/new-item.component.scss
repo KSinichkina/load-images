@@ -1,9 +1,20 @@
 .nav-holder {
   position: fixed;
   top: 0;
+  padding: 0 20px;
   width: 100%;
   height: 170px;
   background: #fff;
   box-shadow: 0 0 9px 0 #d6d6d6;
   z-index: 99;
+}
+
+.actions {
+  margin: 20px 0;
+}
+
+@media screen and (min-width: 768px) {
+  .nav-holder {
+    height: 115px;
+  }
 }

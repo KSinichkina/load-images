@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { UploadService } from './new-item.service';
+import { Observable } from 'rxjs/Observable';
 
 import { ListItemsService } from './../service/edit-item.service.ts';
 import { Subscription }   from 'rxjs/Subscription';
 import { FileUploader } from 'ng2-file-upload';
-
 
 @Component({
   selector: 'new-item',
@@ -66,9 +66,13 @@ export class NewItemComponent {
 
   onSave(event) {
     if (!this.isEditAction) {
-      this.UploadService.addItem(this.tooltip, this.files);
+      this.UploadService.addItem(this.tooltip, this.files).subscribe(items => {
+        this.ListItemsService.getItems(items);
+      });
     } else if (this.isFileChanged) {
-      this.UploadService.editItem(this.editableItem, this.tooltip, this.files);
+      this.UploadService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
+        this.ListItemsService.getItems(items);
+      });
     }
     this.isEditAction = false;
     this.isFileChanged = false;
@@ -82,20 +86,25 @@ export class NewItemComponent {
     //make server remove action
     if (!this.isEditAction) {
       if (this.removedItems) {
-        this.UploadService.removeItems(this.removedItems);
+        this.UploadService.removeItems(this.removedItems).subscribe(items => {
+          this.ListItemsService.getItems(items);
+        });
+
         this.isRemoveAction = false;
       }
       if (this.isFileChanged) {
-        this.UploadService.addItem(this.tooltip, this.files);
+        this.UploadService.addItem(this.tooltip, this.files).subscribe(items => {
+          this.ListItemsService.getItems(items);
+        });
         this.isFileChanged = false;
         this.isInputChanged = false;
       }
     } else {
-      this.UploadService.editItem(this.editableItem, this.tooltip, this.files);
+      this.UploadService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
+        this.ListItemsService.getItems(items);
+      });
       this.isEditAction = false;
     }
-
-    //document.querySelectorAll('.remove')
     //clear fields
   }
 

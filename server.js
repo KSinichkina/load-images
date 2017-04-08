@@ -67,18 +67,15 @@ app.get('/', function (req, res) {
 });
 
 app.post('/remove', function (req, res) {
-  if (req.body)
-    return res.sendStatus(200);
+    return res.send(mapResponse);
 });
 
 app.post('/edit', function (req, res) {
-  if (req.body)
-    return res.sendStatus(200);
+    return res.send(mapResponse);
 });
 
 app.post('/uploadImageData', function (req, res) {
-  if (req.body)
-    return res.sendStatus(200);
+    return res.send(mapResponse);
 });
 
 app.post('/upload', function(req, res) {
