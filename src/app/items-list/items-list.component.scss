@@ -1,0 +1,16 @@
+.images-list-holder {
+  margin-top: 200px;
+  padding: 20px;
+}
+.editable {
+  box-shadow: 0 0 20px 5px #286090;
+}
+.removed {
+  box-shadow: 0 0 20px 5px #c9302c;
+}
+
+// TODO add normalizer
+ul {
+  padding: 0;
+  list-style: none;
+}

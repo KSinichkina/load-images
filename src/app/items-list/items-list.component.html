@@ -1,0 +1,14 @@
+<ul class="images-list-holder row">
+  <li *ngFor="let item of items" class="col-sm-6 col-md-4">
+    <div class="thumbnail" [class.editable]="item.isInEditItem" [class.removed]="item.isRemovedItem">
+      <img class="image" src="{{ item.src }}">
+      <div class="caption">
+        <h3>{{ item.tooltip }}</h3>
+        <p>
+          <button (click)="itemEdit($event, item)" class="btn btn-primary">Edit</button>
+          <button (click)="itemRemove($event, item)" class="btn btn-danger">Remove</button>
+          <a [routerLink]="['/preview', item.id, item]" class="btn btn-default">Preview</a>
+      </div>
+    </div>
+  </li>
+</ul>
