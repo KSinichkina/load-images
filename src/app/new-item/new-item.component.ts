@@ -2,6 +2,8 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { UploadService } from './new-item.service';
 import { Observable } from 'rxjs/Observable';
 
+import { FormsModule }   from '@angular/forms';
+
 import { ListItemsService } from './../service/edit-item.service.ts';
 import { Subscription }   from 'rxjs/Subscription';
 import { FileUploader } from 'ng2-file-upload';
@@ -65,47 +67,39 @@ export class NewItemComponent {
   }
 
   onSave(event) {
-    if (!this.isEditAction) {
-      this.UploadService.addItem(this.tooltip, this.files).subscribe(items => {
-        this.ListItemsService.getItems(items);
-      });
-    } else if (this.isFileChanged) {
-      this.UploadService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
-        this.ListItemsService.getItems(items);
-      });
-    }
-    this.isEditAction = false;
-    this.isFileChanged = false;
-    this.isInputChanged = false;
-
-    //remove editable marker
-    //clear fields
+    this.handleRequest();
   }
 
   onSaveAll() {
-    //make server remove action
+    this.handleRequest();
+  }
+
+  handleRequest() {
     if (!this.isEditAction) {
       if (this.removedItems) {
         this.UploadService.removeItems(this.removedItems).subscribe(items => {
           this.ListItemsService.getItems(items);
-        });
 
-        this.isRemoveAction = false;
+          this.isRemoveAction = false;
+        });
       }
       if (this.isFileChanged) {
         this.UploadService.addItem(this.tooltip, this.files).subscribe(items => {
           this.ListItemsService.getItems(items);
+
+          this.isFileChanged = false;
+          this.isInputChanged = false;
         });
-        this.isFileChanged = false;
-        this.isInputChanged = false;
       }
     } else {
       this.UploadService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
         this.ListItemsService.getItems(items);
+
+        this.isEditAction = false;
       });
-      this.isEditAction = false;
     }
-    //clear fields
+    //TODO: clear fields via angular
+    document.getElementsByTagName("form")[0].reset();
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
 <div class="nav-holder">
-  <form class="new-item-form navbar-form navbar-left">
+  <form class="new-item-form navbar-form navbar-left" #imageForm="ngForm">
     <div class="form-group">
 
       <div class="form-group">
@@ -7,11 +7,11 @@
       </div>
       <input type="text" class="new-tooltip form-control" placeholder="Set tooltip text" value="{{editableItem.tooltip}}" (change)="onInputChange($event)" />
       <div class="actions">
-        <button type="button" class="btn btn-success" (click)="uploader.uploadAll()" (click)="onSave($event)" [disabled]="!uploader.getNotUploadedItems().length && !isFileChanged && !isInputChanged">
+        <button type="button" class="btn btn-success" (click)="uploader.uploadAll()" (click)="onSave($event); imageForm.reset()" [disabled]="!uploader.getNotUploadedItems().length && !isFileChanged && !isInputChanged">
           <span class="glyphicon glyphicon-upload"></span> Upload all
         </button>
         <img class="image-preview" src="{{ editableItem.src }}" [class.hidden]="!isFileChanged" width="50">
-        <button [disabled] ="!isFileChanged && !isInputChanged && !isRemoveAction" (click)="onSaveAll($event)" class="btn btn-success">Save All</button>
+        <button [disabled] ="!isFileChanged && !isInputChanged && !isRemoveAction" (click)="onSaveAll($event); imageForm.reset()" class="btn btn-success">Save All</button>
       </div>
     </div>
   </form>
