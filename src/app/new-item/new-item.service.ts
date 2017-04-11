@@ -15,20 +15,25 @@ export class UploadService {
     return this.http.post(this.itemRemoveURL, items);
   }
 
-  addItem(tooltip: string, files: Object):any {
-    let file = files.item(0);
-    let fileData = {
-      modified: file.lastModifiedDate,
-      name: file.name,
-      size: file.size,
-      type: file.type
-    };
+  addItem(tooltip: string, files: any):any {
+    if (files && files.length !== 0) {
+      let file = files.item(0);
+      let fileData = {
+        modified: file.lastModifiedDate,
+        name: file.name,
+        size: file.size,
+        type: file.type
+      };
 
-    return this.http.post(this.itemUploadURL, {fileData, tooltip});
+      return this.http.post(this.itemUploadURL, {fileData, tooltip});
+    } else {
+
+      return this.http.post(this.itemUploadURL, {tooltip});
+    }
   }
 
-  editItem(editableItemId: Object, tooltip: string, files: Object):any {
-    if (files) {
+  editItem(editableItemId: Object, tooltip: string, files: any):any {
+    if (files && files.length !== 0) {
       let file = files.item(0);
       let fileData = {
         modified: file.lastModifiedDate,

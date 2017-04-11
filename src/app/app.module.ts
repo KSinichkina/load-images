@@ -31,5 +31,4 @@ import { ItemsListComponent } from './items-list/items-list.component';
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
-
 }

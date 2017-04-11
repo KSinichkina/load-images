@@ -15,7 +15,7 @@ export class PreviewComponent {
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {
+  private ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
       this.src = params['src'];
@@ -23,7 +23,7 @@ export class PreviewComponent {
     });
   }
 
-  ngOnDestroy() {
+  private ngOnDestroy() {
     this.sub.unsubscribe();
   }
 }

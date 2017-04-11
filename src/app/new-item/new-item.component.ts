@@ -34,6 +34,7 @@ export class NewItemComponent {
     this.subscription = ListItemsService.editItem$.subscribe(
       editableItem => {
         this.isEditAction = true;
+        this.isFileChanged = true;
         this.editableItem = editableItem;
     });
 
@@ -45,11 +46,11 @@ export class NewItemComponent {
     );
   }
 
-  onFileLoadChange(event) {
+  private onFileLoadChange(event) {
     let reader = new FileReader();
     let image = <HTMLInputElement>document.querySelector('.image-preview');
 
-    reader.onload = function(event) {
+    reader.onload = function(event: any) {
       if (image) {
         image.src = event.srcElement.result;
       }
@@ -61,20 +62,20 @@ export class NewItemComponent {
     this.isFileChanged =  true;
   }
 
-  onInputChange(event) {
+  private onInputChange(event) {
     this.tooltip = event.srcElement.value;
     this.isInputChanged =  true;
   }
 
-  onSave(event) {
+  private onSave(event) {
     this.handleRequest();
   }
 
-  onSaveAll() {
+  private onSaveAll() {
     this.handleRequest();
   }
 
-  handleRequest() {
+  private handleRequest() {
     if (!this.isEditAction) {
       if (this.removedItems) {
         this.UploadService.removeItems(this.removedItems).subscribe(items => {
@@ -98,11 +99,20 @@ export class NewItemComponent {
         this.isEditAction = false;
       });
     }
-    //TODO: clear fields via angular
-    document.getElementsByTagName("form")[0].reset();
+    this.resetForm();
   }
 
-  ngOnDestroy() {
+  private resetForm() {
+    this.editableItem = {src: '', tooltip: ''};
+    this.isFileChanged = false;
+  }
+
+  private handleError(error:any):Promise<any> {
+    console.error('No server connection', error);
+    return Promise.reject(error.message || error);
+  }
+
+  private ngOnDestroy() {
     this.subscription.unsubscribe();
     this.subscriptionRemoved.unsubscribe();
   }

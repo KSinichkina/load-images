@@ -21,23 +21,23 @@ export class ItemsListComponent {
     this.subscription = ListItemsService.getItems$.subscribe(items => this.items = items.json());
   }
 
-  ngOnInit(): void {
+  private ngOnInit(): void {
     this.getList();
   }
 
-  getList(): void {
+  private getList(): void {
     this.listService
       .getList()
       .subscribe(items => this.items = items);
   }
 
-  itemEdit(event, item) {
+  private itemEdit(event, item) {
     this.items.map(val => val.isInEditItem = false);
     item.isInEditItem = true;
     this.ListItemsService.editItem(item);
   }
 
-  itemRemove(event, item) {
+  private itemRemove(event, item) {
     if (!this.editItems[item.id]) {
       item.isRemovedItem = true;
       this.editItems.push(item.id);
@@ -45,7 +45,7 @@ export class ItemsListComponent {
     }
   }
 
-  ngOnDestroy() {
+  private ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }
