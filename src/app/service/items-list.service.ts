@@ -1,14 +1,30 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Injectable }    from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
+import { Observable }        from 'rxjs/Observable';
+
+import 'rxjs/Rx';
+
 @Injectable()
-export class UploadService {
+export class ListService {
+
+  private itemListUrl = 'http://localhost:3030/load-list';
   private itemRemoveURL = 'http://localhost:3030/remove';
-  private itemUploadURL = 'http://localhost:3030/uploadImageData';
+  private itemUploadURL = 'http://localhost:3030/upload-image-data';
   private itemEditURL = 'http://localhost:3030/edit';
 
-  constructor (private http:Http) {
+  constructor(private http:Http) {
+  }
+
+  getList():Observable<any> {
+    return this.http.get(this.itemListUrl)
+      .map(response => response.json())
+      .catch(this.handleError);
+  }
+
+  private handleError(error:any):Promise<any> {
+    console.error('An error occurred', error);
+    return Promise.reject(error.message || error);
   }
 
   removeItems(items: Array<number>):any {

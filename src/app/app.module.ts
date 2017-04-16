@@ -7,6 +7,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
 
+import { ListService } from './service/items-list.service.ts';
+import { ItemsCommunictionService } from './service/item.communication.service';
+
 import { PreviewComponent } from './preview/preview.component';
 import { NewItemComponent } from './new-item/new-item.component';
 import { ItemsListComponent } from './items-list/items-list.component';
@@ -27,6 +30,8 @@ import { ItemsListComponent } from './items-list/items-list.component';
     RouterModule.forRoot(rootRouterConfig, { useHash: true })
   ],
   providers: [
+    ListService,
+    ItemsCommunictionService
   ],
   bootstrap: [ AppComponent ]
 })

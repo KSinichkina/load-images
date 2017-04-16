@@ -1,31 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription }   from 'rxjs/Subscription';
 
-import { ListService } from './items-list.service';
-import { ListItemsService }     from './../service/edit-item.service.ts';
+import { ListService } from './../service/items-list.service.ts';
+import { ItemsCommunictionService }     from './../service/item.communication.service';
 
 @Component({
   selector: 'items-list',
   styleUrls: ['./items-list.component.scss'],
-  templateUrl: './items-list.component.html',
-  providers: [ ListService ]
+  templateUrl: './items-list.component.html'
 })
-export class ItemsListComponent {
+export class ItemsListComponent implements OnInit, OnDestroy {
   private items: Array<{id: number, src: string, tooltip: string, isInEditItem?: boolean}>;
   private editItems: Array<number>;
   private subscription: Subscription;
 
-  constructor(private listService: ListService, private ListItemsService: ListItemsService) {
+  constructor(private listService: ListService, private ItemsCommunictionService: ItemsCommunictionService) {
     this.editItems = [];
 
-    this.subscription = ListItemsService.getItems$.subscribe(items => this.items = items.json());
+    this.subscription = ItemsCommunictionService.getItems$.subscribe(items => this.items = items.json());
   }
 
-  private ngOnInit(): void {
-    this.getList();
-  }
-
-  private getList(): void {
+  ngOnInit(): void {
     this.listService
       .getList()
       .subscribe(items => this.items = items);
@@ -34,18 +29,18 @@ export class ItemsListComponent {
   private itemEdit(event, item) {
     this.items.map(val => val.isInEditItem = false);
     item.isInEditItem = true;
-    this.ListItemsService.editItem(item);
+    this.ItemsCommunictionService.editItem(item);
   }
 
   private itemRemove(event, item) {
     if (!this.editItems[item.id]) {
       item.isRemovedItem = true;
       this.editItems.push(item.id);
-      this.ListItemsService.removedAction(this.editItems);
+      this.ItemsCommunictionService.removedAction(this.editItems);
     }
   }
 
-  private ngOnDestroy() {
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }

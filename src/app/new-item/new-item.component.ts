@@ -1,20 +1,19 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { UploadService } from './new-item.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { FormsModule }   from '@angular/forms';
 
-import { ListItemsService } from './../service/edit-item.service.ts';
+import { ListService } from './../service/items-list.service.ts';
+import { ItemsCommunictionService } from './../service/item.communication.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'new-item',
   styleUrls: ['./new-item.component.scss'],
-  templateUrl: './new-item.component.html',
-  providers: [ UploadService, ListItemsService ]
+  templateUrl: './new-item.component.html'
 })
-export class NewItemComponent {
+export class NewItemComponent implements OnDestroy {
   private files: File[];
   private tooltip: string;
   private isFileChanged: boolean;
@@ -27,18 +26,18 @@ export class NewItemComponent {
   private subscriptionRemoved: Subscription;
   private uploader:FileUploader = new FileUploader({url:'http://localhost:3030/upload'});
 
-  constructor(private UploadService:UploadService, private ListItemsService: ListItemsService) {
+  constructor(private ItemsCommunictionService: ItemsCommunictionService, private ListService: ListService) {
 
     this.editableItem = {src: '', tooltip: ''};
 
-    this.subscription = ListItemsService.editItem$.subscribe(
+    this.subscription = ItemsCommunictionService.editItem$.subscribe(
       editableItem => {
         this.isEditAction = true;
         this.isFileChanged = true;
         this.editableItem = editableItem;
     });
 
-    this.subscriptionRemoved = ListItemsService.removedAction$.subscribe(
+    this.subscriptionRemoved = ItemsCommunictionService.removedAction$.subscribe(
       removedItems => {
         this.isRemoveAction = removedItems.length > 0 || false;
         this.removedItems = removedItems;
@@ -78,23 +77,23 @@ export class NewItemComponent {
   private handleRequest() {
     if (!this.isEditAction) {
       if (this.removedItems) {
-        this.UploadService.removeItems(this.removedItems).subscribe(items => {
-          this.ListItemsService.getItems(items);
+        this.ListService.removeItems(this.removedItems).subscribe(items => {
+          this.ItemsCommunictionService.getItems(items);
 
           this.isRemoveAction = false;
         });
       }
       if (this.isFileChanged) {
-        this.UploadService.addItem(this.tooltip, this.files).subscribe(items => {
-          this.ListItemsService.getItems(items);
+        this.ListService.addItem(this.tooltip, this.files).subscribe(items => {
+          this.ItemsCommunictionService.getItems(items);
 
           this.isFileChanged = false;
           this.isInputChanged = false;
         });
       }
     } else {
-      this.UploadService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
-        this.ListItemsService.getItems(items);
+      this.ListService.editItem(this.editableItem, this.tooltip, this.files).subscribe(items => {
+        this.ItemsCommunictionService.getItems(items);
 
         this.isEditAction = false;
       });
@@ -107,12 +106,7 @@ export class NewItemComponent {
     this.isFileChanged = false;
   }
 
-  private handleError(error:any):Promise<any> {
-    console.error('No server connection', error);
-    return Promise.reject(error.message || error);
-  }
-
-  private ngOnDestroy() {
+  ngOnDestroy() {
     this.subscription.unsubscribe();
     this.subscriptionRemoved.unsubscribe();
   }

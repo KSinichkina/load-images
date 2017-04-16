@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 
 @Injectable()
-export class ListItemsService {
+export class ItemsCommunictionService {
   private editItemSource = new Subject<any>();
   private getItemsSource = new Subject<any>();
   private removedActionSource = new Subject<any>();

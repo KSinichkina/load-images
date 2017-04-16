@@ -50,7 +50,7 @@ var mapResponse = [{
     "tooltip": "2016-12-01 21:46:28.233"
   }];
 
-app.get('/', function (req, res) {
+app.get('/load-list', function (req, res) {
 
   //httpGet(options)
   //  .then(
@@ -74,7 +74,7 @@ app.post('/edit', function (req, res) {
     return res.send(mapResponse);
 });
 
-app.post('/uploadImageData', function (req, res) {
+app.post('/upload-image-data', function (req, res) {
     return res.send(mapResponse);
 });
 
